@@ -2,7 +2,6 @@
 package arp
 
 import (
-	"log"
 	"net"
 	"sync"
 	"time"
@@ -75,9 +74,7 @@ func (r *Resolver) getTable() (Table, error) {
 	defer r.mu.Unlock()
 
 	if time.Now().After(r.deadline) {
-		log.Println("starting read")
 		t, err := ReadTable("/proc/net/arp")
-		log.Println("finished read")
 		if err != nil {
 			return nil, err
 		}
