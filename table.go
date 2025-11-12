@@ -9,6 +9,10 @@ import (
 type Table map[string]string
 
 func ReadTable(filename string) (Table, error) {
+	return readTable(filename, true, true)
+}
+
+func readTable(filename string, ip2hw, hw2ip bool) (Table, error) {
 	fp, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -40,8 +44,12 @@ func ReadTable(filename string) (Table, error) {
 			return nil, &duplicateError{hwAddrKind, hw}
 		}
 
-		table[ip] = hw
-		table[hw] = ip
+		if ip2hw {
+			table[ip] = hw
+		}
+		if hw2ip {
+			table[hw] = ip
+		}
 	}
 
 	if err = scanner.Err(); err != nil {
